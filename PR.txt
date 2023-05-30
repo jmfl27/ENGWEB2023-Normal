@@ -1,0 +1,70 @@
+--> 1.1: SETUP BASE DE DADOS
+
+- Ao analisar o dataset fornecido, apercebi-me que existia um campo ID, pelo o que substitui o nome de
+todos estes campos por "_id", através do replace do VS CODE, de forma a haver o identificador requirido
+pelo mongodb.
+
+- Importei para o mongodb utilizando os seguintes comandos:
+ >> mongoimport -d plantas -c plantas --file plantas.json --jsonArray
+
+- Obtive a seguinte menssagem, pelo o que a importação correu bem:
+ >> 2023-05-30T14:09:11.884+0100    connected to: mongodb://localhost/
+    2023-05-30T14:09:12.498+0100    29617 document(s) imported successfully. 0 document(s) failed to import.
+
+- A base de dados pode ser acedida através do seguinte comando:
+ >> mongosh
+ >> use plantas
+
+--> 1.2: QUERIES
+
+- 1: Quantos registos estão na base de dados;
+	R: db.plantas.find().count()
+
+- 2: Quantos registos de plantação se encontram na freguesia "São Domingos de Rana"?
+	R: db.plantas.find({Freguesia:"São Domingos de Rana"}).count()
+
+- 3: Qual a lista de freguesias (ordenada alfabeticamente e sem repetições)?
+	R: db.plantas.distinct("Freguesia").sort()
+
+- 4: Qual a distribuição dos registos por freguesia (quantos registos em cada freguesia)
+	R: db.plantas.aggregate([{$group: {_id: "$Freguesia",count: { $sum: 1 }}}])
+
+- 5: Qual a distribuição dos registos por espécie?
+	R: db.plantas.aggregate([{$group: {_id: "$Espécie",count: { $sum: 1 }}}])
+
+--> 1.3: API DE DADOS
+
+- A API de dados encontra-se na pasta "ex1"
+
+- Para criar o esqueleto da API de dados, devem se executar os seguintes comandos:
+>> npx express-generator --view=pug 
+>> npm i 
+>> npm i mongoose --save 
+
+- Para a executar, é só utilizar o seguinte comando:
+>> npm start
+
+- NOTAS:
+  | O "GET /plantas/especies" devolve as espécies ordenadas pela ordem alfabética, apesar de espécies 
+    comecadas por letras com acentos se encontrarem no fim da lista (devido ao ASCII).
+
+  | Testei a API usando o Postman, pelo o que confirmei que o resultado obtido era o pretendido.
+
+--> 1.4: INTERFACE
+
+- A Interface encontra-se na pasta "ex2".
+
+- Para criar o esqueleto da interface, devem se executar os seguintes comandos:
+>> npx express-generator --view=pug 
+>> npm i 
+>> npm i axios --save 
+
+- Para a executar, é só utilizar o seguinte comando:
+>> npm start
+
+- NOTAS:
+  | De forma a obter todos os registos de uma mesma espécie, decidi aproveitar o "GET /plantas?especie=EEEE"
+    já requerido pela a API de dados, visto que devolve a lista dos registos correspondentes à espécie EEEE.
+  
+  | A interface, apesar de primitiva e lenta devido ao tamanho do dataset, encontra-se completamente
+    funcional
