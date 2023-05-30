@@ -50,6 +50,10 @@ pelo mongodb.
 
   | Testei a API usando o Postman, pelo o que confirmei que o resultado obtido era o pretendido.
 
+  | Para a obtenção das espécies, não usei regex porque reparei que existiam espécies diferentes com nomes
+    em comum, por exemplo "oliveira" e "oliveira do paraíso", pelo o que decidi considerá-las duas espécies
+    distinctas uma da outra.
+
 --> 1.4: INTERFACE
 
 - A Interface encontra-se na pasta "ex2".
